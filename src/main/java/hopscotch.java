@@ -1,7 +1,8 @@
 import java.io.*;
+import java.util.Objects;
 import java.util.StringTokenizer;
 
-public class Main {
+public class hopscotch {
     public static void main(String[] args) throws IOException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         final BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -32,8 +33,9 @@ class Solver {
                 if (square == 1) {
                     int currentDistance = getPathDistance(n, k, board, 1, i, j, 0);
                     if (currentDistance < result) {
-                        System.out.println(j + " " + i + " tiene " + currentDistance);
                         result = currentDistance;
+                    } else if (currentDistance == 0) {
+                        return -1;
                     }
                 }
             }
@@ -61,7 +63,6 @@ class Solver {
                 }
             }
         }
-        //System.out.println("Tn k " + currentK + " distance " + theBest);
         return theBest == Integer.MAX_VALUE ? -1 : theBest + previousResult;
     }
 
