@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.Objects;
 import java.util.StringTokenizer;
 
 public class hopscotch {
@@ -19,54 +18,39 @@ public class hopscotch {
         }
 
         final Solver solver = new Solver();
-        bw.write(String.valueOf(solver.solve(n, k, board)));
+        bw.write(String.valueOf(solver.solve(n, k, board, 0, -1, -1, 0)));
         bw.flush();
     }
 }
 
 class Solver {
-    public long solve(int n, int k, int[][] board) {
-        int result = Integer.MAX_VALUE;
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                int square = board[i][j];
-                if (square == 1) {
-                    int currentDistance = getPathDistance(n, k, board, 1, i, j, 0);
-                    if (currentDistance < result) {
-                        result = currentDistance;
-                    } else if (currentDistance == 0) {
-                        return -1;
-                    }
-                }
-            }
-        }
-        return result;
-    }
-
-    public int getPathDistance(int n, int k, int[][] board, int currentK, int ai, int aj, int previousResult) {
+    public int solve(int n, int k, int[][] board, int currentK, int ai, int aj, int previousResult) {
         if (previousResult == -1) {
             return -1;
         }
         if (currentK == k) {
             return 0;
         }
-        int theBest = Integer.MAX_VALUE;
+        int minPath = Integer.MAX_VALUE;
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                int square = board[i][j];
-                if (square == currentK + 1) {
-                    int squareDistance = getDistance(aj, j, ai, i);
-                    int totalDistance =  squareDistance + getPathDistance(n, k, board, currentK + 1, i, j, previousResult);
-                    if (totalDistance < theBest) {
-                        theBest = totalDistance;
+                if (board[i][j] == currentK + 1) {
+                    int totalDistance =  getDistance(aj, j, ai, i) + solve(n, k, board, currentK + 1, i, j, previousResult);
+                    if (totalDistance < minPath) {
+                        minPath = totalDistance;
+                    } else if (totalDistance == 0) {
+                        return -1;
                     }
                 }
             }
         }
-        return theBest == Integer.MAX_VALUE ? -1 : theBest + previousResult;
+        return minPath == Integer.MAX_VALUE ? -1 : minPath + previousResult;
     }
 
     private int getDistance(int x1, int x2, int y1, int y2) {
+        if (x1 == -1) {
+            return 0;
+        }
         return Math.abs(x2 - x1) + Math.abs(y2 - y1);
     }
 
