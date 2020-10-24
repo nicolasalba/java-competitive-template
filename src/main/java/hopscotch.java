@@ -42,10 +42,10 @@ class Solver {
         int minPath = Integer.MAX_VALUE;
         for (Position position : board.get(currentK + 1)) {
             int totalDistance =  getDistance(beforePosition, position) + solve(n, k, board, currentK + 1, position, previousResult);
-            if (totalDistance < minPath) {
-                minPath = totalDistance;
-            } else if (totalDistance == 0) {
+            if (totalDistance == 0) {
                 return -1;
+            } else if (totalDistance < minPath) {
+                minPath = totalDistance;
             }
         }
         return minPath == Integer.MAX_VALUE ? -1 : minPath + previousResult;
